@@ -11,3 +11,5 @@ Revision history for Uniform
           size string parser (e.g. '2M' -> bytes), promoted out of
           Uniform::Upload::File::max_size for reuse across satellite
           distributions (upload size caps, request body size caps, etc).
+1.03  2026-08-23
+        - Added links in POD

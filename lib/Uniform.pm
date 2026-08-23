@@ -3,7 +3,7 @@ package Uniform;
 use strict;
 use warnings;
 
-our $VERSION = '1.02';
+our $VERSION = '1.03';
 
 1;
 
@@ -82,6 +82,8 @@ the development of external driver plugins. See L<Uniform::Utils> for details.
 =head1 SEE ALSO
 
 L<Uniform::HTMX>
+
+L<Uniform::Upload>
 
 =head1 AUTHOR
 
