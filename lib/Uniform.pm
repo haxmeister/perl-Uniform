@@ -3,7 +3,7 @@ package Uniform;
 use strict;
 use warnings;
 
-our $VERSION = '1.00';
+our $VERSION = '1.01';
 
 1;
 
@@ -78,6 +78,10 @@ exception using L<Uniform::Exceptions> or C<Carp::croak> to guarantee clear erro
 
 This root distribution exposes shared internal utility libraries designed to accelerate
 the development of external driver plugins. See L<Uniform::Utils> for details.
+
+=head1 SEE ALSO
+
+L<Uniform::HTMX>
 
 =head1 AUTHOR
 

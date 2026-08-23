@@ -4,3 +4,5 @@ Revision history for Uniform
         - Initial ecosystem base distribution release.
         - Centralized Uniform::Utils utility module established.
         - Extracted production-grade case-insensitive priority header normalization logic.
+1.01  2026-08-22
+        - Added links to POD
