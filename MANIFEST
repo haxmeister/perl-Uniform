@@ -1,0 +1,9 @@
+Changes
+LICENSE
+lib/Uniform.pm
+lib/Uniform/Utils.pm
+Makefile.PL
+MANIFEST
+MANIFEST.SKIP
+t/00-load.t
+t/utils.t
