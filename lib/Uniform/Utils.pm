@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Exporter 'import';
 use Carp qw(croak);
+use Uniform::Exceptions; # PULL IN THE EXCEPTION ENGINE
 
 our $VERSION = '1.00';
 our @EXPORT_OK = qw(normalize_http_headers);
@@ -11,7 +12,14 @@ our @EXPORT_OK = qw(normalize_http_headers);
 # Shared production-grade normalization engine utilized by all Uniform distributions
 sub normalize_http_headers {
     my ($hash) = @_;
-    croak "Header argument must be a HASH reference" unless ref($hash) eq 'HASH';
+
+    unless (ref($hash) eq 'HASH') {
+        Uniform::Exceptions->throw(
+            type      => 'TypeError',
+            message   => 'Normalization input context must be a strict HASH reference',
+            attribute => 'hash_input',
+        );
+    }
 
     my (%normalized, %priority);
 
