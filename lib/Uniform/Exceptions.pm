@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use overload '""' => \&to_string; # Automatically stringifies when printed or used in regex
 
-our $VERSION = '1.00';
+our $VERSION = '1.02';
 
 # Class Factory Constructor
 sub throw {

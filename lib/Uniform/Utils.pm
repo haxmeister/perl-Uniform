@@ -6,8 +6,8 @@ use Exporter 'import';
 use Carp qw(croak);
 use Uniform::Exceptions; # PULL IN THE EXCEPTION ENGINE
 
-our $VERSION = '1.00';
-our @EXPORT_OK = qw(normalize_http_headers);
+our $VERSION = '1.02';
+our @EXPORT_OK = qw(normalize_http_headers parse_size_limit);
 
 # Shared production-grade normalization engine utilized by all Uniform distributions
 sub normalize_http_headers {
@@ -58,6 +58,34 @@ sub normalize_http_headers {
     return \%normalized;
 }
 
+# Shared human-readable size string parser utilized by any Uniform distribution
+# that needs to compare a byte count against a configured limit (upload size
+# caps, request body size caps, etc).
+sub parse_size_limit {
+    my ($limit) = @_;
+
+    unless (defined $limit && length $limit) {
+        Uniform::Exceptions->throw(
+            type      => 'ValidationError',
+            message   => 'parse_size_limit requires a defined, non-empty size string (e.g. "2M") or a plain byte count',
+            attribute => 'limit',
+        );
+    }
+
+    my %multiplier = ( K => 1024, M => 1024**2, G => 1024**3 );
+    my ($num, $unit) = $limit =~ /^([\d.]+)\s*([KMG]?)$/i;
+
+    unless (defined $num) {
+        Uniform::Exceptions->throw(
+            type      => 'ValidationError',
+            message   => "parse_size_limit received an unparsable size string: '$limit'",
+            attribute => 'limit',
+        );
+    }
+
+    return $unit ? $num * $multiplier{uc $unit} : $num;
+}
+
 1;
 
 __END__
@@ -90,5 +118,20 @@ clean, normalized data model based on strict ecosystem validation criteria:
 =item * B<Security Sandboxing>: Keys failing structural validation checks are rejected entirely, filtering out malicious header manipulation or collision vectors.
 
 =back
+
+=head2 parse_size_limit( $limit )
+
+Converts a human-readable size string into a plain byte count. C<$limit> may be a
+number of bytes on its own, or a number followed by a C<K>, C<M>, or C<G> suffix
+(case-insensitive, 1024-based: kilobytes, megabytes, gigabytes) -- e.g. C<'500K'>,
+C<'2M'>, C<'1G'>, or a bare C<'2048'>.
+
+Throws a C<ValidationError> via L<Uniform::Exceptions> if C<$limit> is undefined,
+an empty string, or does not match a parsable size expression. Returns the
+equivalent byte count as a plain number on success.
+
+    use Uniform::Utils qw(parse_size_limit);
+
+    my $bytes = parse_size_limit('2M'); # 2097152
 
 =cut
